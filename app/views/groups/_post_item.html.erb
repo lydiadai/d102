@@ -1,0 +1,12 @@
+
+<tr>
+  <td>#</td>
+  <td><%= post.title%></td>
+  <td><%= render_post_content(post)%></td>
+  <td><%= post.user.email%></td>
+  <td><%= post.created_at%></td>
+  <%if current_user && current_user == post.user%>
+  <td><%= link_to("Edit",edit_group_post_path(post.group,post),class:"btn btn-sm btn-default")%></td>
+  <td><%= link_to("Delete",group_post_path(post.group,post),class:"btn btn-sm btn-default",method: :delete, data:{confirm:"Are you sure?"})%></td>
+  <% end %>
+</tr>
