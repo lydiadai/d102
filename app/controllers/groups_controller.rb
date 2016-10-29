@@ -14,9 +14,10 @@ class GroupsController < ApplicationController
     @group = Group.new(group_params)
     @group.user = current_user
     if @group.save
-    redirect_to groups_path
+      current_user.join!(@group)
+      redirect_to groups_path
     else
-    render :new
+      render :new
     end
   end
 
@@ -40,6 +41,25 @@ class GroupsController < ApplicationController
     flash[:alert]="Group Deleted"
   end
 
+  def join
+    @group = Group.find(params[:id])
+    if !current_user.is_member_of?(@group)
+      current_user.join!(@group)
+      flash[:notice]="Join Group Success"
+
+    end
+    redirect_to group_path(@group)
+  end
+
+  def quit
+    @group = Group.find(params[:id])
+    if current_user.is_member_of?(@group)
+      current_user.quit!(@group)
+      flash[:notice]="Quit Group Success"
+    
+    end
+    redirect_to group_path(@group)
+  end
 
   private
   def find_group_and_check_permission
